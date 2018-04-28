@@ -15,7 +15,7 @@ RUN apk add --no-cache \
     libc6-compat \
     run-parts \
     ca-certificates \
-    groff \ 
+    groff \
     less
 
 ENV BUILDKITE_BUILD_PATH=/buildkite/builds \
@@ -36,14 +36,16 @@ RUN curl -Lfs -o /buildkite/bootstrap.sh https://raw.githubusercontent.com/build
 
 COPY ./entrypoint.sh /usr/local/bin/buildkite-agent-entrypoint
 
-ENV SBT_VERSION 1.1.4
-ENV SBT_HOME /usr/local/sbt
-ENV PATH ${PATH}:${SBT_HOME}/bin
+# Install SBT
+ENV SBT_VERSION=1.1.4
+ENV SBT_HOME=/usr/local/sbt
+ENV PATH=${PATH}:${SBT_HOME}/bin
 
 RUN curl -sL "https://github.com/sbt/sbt/releases/download/v$SBT_VERSION/sbt-$SBT_VERSION.tgz" | gunzip | tar -x -C /usr/local && \
     echo -ne "- with sbt $SBT_VERSION\n" >> /root/.built && \
     chmod 0755 $SBT_HOME/bin/sbt
 
+# Install AWS CLI
 RUN pip --no-cache-dir install awscli
 
 VOLUME /buildkite

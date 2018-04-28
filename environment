@@ -1,0 +1,17 @@
+set -eu
+
+# Setup SSH
+mkdir -p ~/.ssh && chmod 700 ~/.ssh
+path=~/.ssh/github-keys
+
+# Fetch deploy keys from AWS
+aws s3 cp s3://deploy-buildkite-secrets/github-keys $path
+
+# Generate SSH config
+cd $path
+keys=`ls *.pub`
+for key in $keys
+do
+   name=${key%.*}
+   printf '%s\n  %s\n  %s\n\n' "Host github.com-$name" "HostName github.com" "IdentityFile $path/$name"
+done
