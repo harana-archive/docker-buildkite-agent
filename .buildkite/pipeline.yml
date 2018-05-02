@@ -1,0 +1,9 @@
+steps:
+
+  - name: ":docker: Docker Build"
+    command: docker build . -t ${DOCKER_IMAGE_REPO}
+
+  - name: ":docker: Docker ECR Push"
+    command: >
+     $(aws ecr get-login --no-include-email --region ap-southeast-2) &&
+     docker push ${DOCKER_IMAGE_REPO}
