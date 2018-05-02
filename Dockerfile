@@ -1,19 +1,18 @@
-FROM mhart/alpine-node:4
+FROM krallin/ubuntu-tini:xenial
 
-RUN apk add --no-cache \
+RUN apt-get update && apt-get install -y \
     tini \
     bash \
     git \
     perl \
     rsync \
+    openjdk-8-jdk \
     openssh-client \
     curl \
     docker \
     jq \
-    su-exec \
-    py-pip \
-    libc6-compat \
-    run-parts \
+    nodejs \
+    python-pip python-dev build-essential \
     tzdata \
     ca-certificates \
     groff \
