@@ -1,4 +1,4 @@
-FROM iflavoursbv/mvn-openjdk-8-alpine
+FROM maven:3.5.3-jdk-8
 
 RUN apk add --no-cache \
     tini \
