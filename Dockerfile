@@ -54,7 +54,7 @@ ENV MVN_VERSION=3.5.3
 ENV MVN_HOME=/usr/local/mvn
 ENV PATH=${PATH}:${MVN_HOME}/bin
 
-RUN curl -sL "https://github.com/apache/maven/archive/maven-$MVN_VERSION.tar.gz" | gunzip | tar -x -C /usr/local && \
+RUN curl -sL "https://archive.apache.org/dist/maven/maven-3/${MVN_VERSION}/binaries/apache-maven-${MVN_VERSION}-bin.tar.gz" | gunzip | tar -x -C /usr/local && \
     echo -ne "- with mvn $MVN_VERSION\n" >> /root/.built && \
     chmod 0755 $MVN_HOME/bin/mvn
 
