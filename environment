@@ -1,11 +1,14 @@
 set -eu
 
 # Setup SSH
-mkdir -p ~/.ssh && chmod 700 ~/.ssh
+mkdir -p ~/.ssh
 path=~/.ssh/github-keys
 
+# Ensure non-interactive Git clone
+ssh-keygen -F github.com || ssh-keyscan github.com >>~/.ssh/known_hosts
+
 # Fetch deploy keys from AWS
-aws s3 cp s3://deploy-buildkite-secrets/github-keys $path
+aws s3 sync s3://deploy-buildkite-secrets/github-keys $path
 
 # Generate SSH config
 cd $path
@@ -13,5 +16,9 @@ keys=`ls *.pub`
 for key in $keys
 do
    name=${key%.*}
-   printf '%s\n  %s\n  %s\n\n' "Host github.com-$name" "HostName github.com" "IdentityFile $path/$name"
+   printf '%s\n  %s\n  %s\n\n' "Host github.com-$name" "HostName github.com" "IdentityFile $path/$name" >> ~/.ssh/config
 done
+
+# Ensure permissions are correct
+chmod -R 700 ~/.ssh
+

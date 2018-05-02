@@ -1,4 +1,4 @@
-FROM openjdk:8-jdk-alpine
+FROM iflavoursbv/mvn-openjdk-8-alpine
 
 RUN apk add --no-cache \
     tini \
@@ -14,27 +14,31 @@ RUN apk add --no-cache \
     py-pip \
     libc6-compat \
     run-parts \
+    tzdata \
     ca-certificates \
     groff \
-    less
+    less \
+  && \
+  pip install --upgrade pip && \
+  pip install docker-compose
 
 ENV BUILDKITE_BUILD_PATH=/buildkite/builds \
     BUILDKITE_HOOKS_PATH=/buildkite/hooks \
-    BUILDKITE_BOOTSTRAP_SCRIPT_PATH=/buildkite/bootstrap.sh
+    BUILDKITE_PLUGINS_PATH=/buildkite/plugins
 
 RUN pip install docker-compose
 
-RUN curl -Lfs -o /usr/local/bin/buildkite-agent https://download.buildkite.com/agent/stable/latest/buildkite-agent-linux-amd64 \
-    && chmod +x /usr/local/bin/buildkite-agent \
-    && mkdir -p /buildkite/builds /buildkite/hooks \
+RUN mkdir -p /buildkite/builds /buildkite/hooks /buildkite/plugins \
     && curl -Lfs -o /usr/local/bin/ssh-env-config.sh https://raw.githubusercontent.com/buildkite/docker-ssh-env-config/master/ssh-env-config.sh \
     && chmod +x /usr/local/bin/ssh-env-config.sh
 
-# In 3.0 this is built into the buildkite-agent binary
-RUN curl -Lfs -o /buildkite/bootstrap.sh https://raw.githubusercontent.com/buildkite/agent/2-1-stable/templates/bootstrap.sh \
-    && chmod +x /buildkite/bootstrap.sh
+RUN curl -sL https://github.com/buildkite/agent/releases/download/v3.0.1/buildkite-agent-linux-amd64-3.0.1.tar.gz | gunzip | tar -x -C /buildkite && \
+    mv /buildkite/buildkite-agent /usr/local/bin && \
+    chmod +x /usr/local/bin/buildkite-agent
 
 COPY ./entrypoint.sh /usr/local/bin/buildkite-agent-entrypoint
+
+COPY ./environment $BUILDKITE_HOOKS_PATH
 
 # Install SBT
 ENV SBT_VERSION=1.1.4
