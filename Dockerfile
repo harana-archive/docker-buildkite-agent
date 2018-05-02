@@ -51,7 +51,7 @@ RUN curl -sL "https://github.com/sbt/sbt/releases/download/v$SBT_VERSION/sbt-$SB
 
 # Install Maven
 ENV MVN_VERSION=3.5.3
-ENV MVN_HOME=/usr/local/mvn
+ENV MVN_HOME=/usr/local/apache-maven-3.2.3
 ENV PATH=${PATH}:${MVN_HOME}/bin
 
 RUN curl -sL "https://archive.apache.org/dist/maven/maven-3/${MVN_VERSION}/binaries/apache-maven-${MVN_VERSION}-bin.tar.gz" | gunzip | tar -x -C /usr/local && \
