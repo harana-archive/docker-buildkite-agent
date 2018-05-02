@@ -45,7 +45,7 @@ ENV SBT_VERSION=1.1.4
 ENV SBT_HOME=/usr/local/sbt
 ENV PATH=${PATH}:${SBT_HOME}/bin
 
-RUN curl -sL "https://github.com/sbt/sbt/releases/download/v$SBT_VERSION/sbt-$SBT_VERSION.tar.gz" | gunzip | tar -x -C /usr/local && \
+RUN curl -sL "https://github.com/sbt/sbt/releases/download/v$SBT_VERSION/sbt-$SBT_VERSION.tgz" | gunzip | tar -x -C /usr/local && \
     echo -ne "- with sbt $SBT_VERSION\n" >> /root/.built && \
     chmod 0755 $SBT_HOME/bin/sbt
 
@@ -54,7 +54,7 @@ ENV MVN_VERSION=3.5.3
 ENV MVN_HOME=/usr/local/mvn
 ENV PATH=${PATH}:${MVN_HOME}/bin
 
-RUN curl -sL "https://github.com/apache/maven/archive/maven-$MVN_VERSION.tgz" | gunzip | tar -x -C /usr/local && \
+RUN curl -sL "https://github.com/apache/maven/archive/maven-$MVN_VERSION.tar.gz" | gunzip | tar -x -C /usr/local && \
     echo -ne "- with mvn $MVN_VERSION\n" >> /root/.built && \
     chmod 0755 $MVN_HOME/bin/mvn
 
