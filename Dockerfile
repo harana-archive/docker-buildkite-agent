@@ -14,7 +14,10 @@ RUN apt-get update && apt-get install -y \
     awscli \
     ca-certificates \
     groff \
-    less
+    less \
+    python-pip
+
+RUN pip install awscli
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
