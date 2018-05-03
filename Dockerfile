@@ -1,33 +1,28 @@
-FROM krallin/ubuntu-tini:xenial
+FROM phusion/baseimage:latest
 
 RUN apt-get update && apt-get install -y \
-    tini \
     bash \
     git \
     perl \
     rsync \
     openjdk-8-jdk \
-    openssh-client \
     curl \
-    docker \
+    docker.io \
     jq \
     nodejs \
-    python-pip python-dev build-essential \
     tzdata \
+    awscli \
     ca-certificates \
     groff \
-    less \
-  && \
-  pip install --upgrade pip && \
-  pip install docker-compose
+    less
+
+RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 ENV BUILDKITE_BUILD_PATH=/buildkite/builds \
     BUILDKITE_HOOKS_PATH=/buildkite/hooks \
     BUILDKITE_PLUGINS_PATH=/buildkite/plugins
 
-RUN pip install docker-compose
-
-RUN mkdir -p /buildkite/builds /buildkite/hooks /buildkite/plugins \
+RUN mkdir -p ${BUILDKITE_BUILD_PATH} ${BUILDKITE_HOOKS_PATH} ${BUILDKITE_PLUGINS_PATH} \
     && curl -Lfs -o /usr/local/bin/ssh-env-config.sh https://raw.githubusercontent.com/buildkite/docker-ssh-env-config/master/ssh-env-config.sh \
     && chmod +x /usr/local/bin/ssh-env-config.sh
 
@@ -38,6 +33,11 @@ RUN curl -sL https://github.com/buildkite/agent/releases/download/v3.0.1/buildki
 COPY ./entrypoint.sh /usr/local/bin/buildkite-agent-entrypoint
 
 COPY ./environment $BUILDKITE_HOOKS_PATH
+
+# Install Tini
+ENV TINI_VERSION v0.18.0
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /sbin/tini
+RUN chmod +x /sbin/tini
 
 # Install SBT
 ENV SBT_VERSION=1.1.4
@@ -56,9 +56,6 @@ ENV PATH=${PATH}:${MVN_HOME}/bin
 RUN curl -sL "https://archive.apache.org/dist/maven/maven-3/${MVN_VERSION}/binaries/apache-maven-${MVN_VERSION}-bin.tar.gz" | gunzip | tar -x -C /usr/local && \
     echo -ne "- with mvn $MVN_VERSION\n" >> /root/.built && \
     chmod 0755 $MVN_HOME/bin/mvn
-
-# Install AWS CLI
-RUN pip --no-cache-dir install awscli
 
 VOLUME /buildkite
 ENTRYPOINT ["buildkite-agent-entrypoint"]
