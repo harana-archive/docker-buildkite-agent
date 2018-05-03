@@ -1,4 +1,4 @@
-FROM blitznote/debase:17.10
+FROM phusion/baseimage:latest
 
 RUN apt-get update && apt-get install -y \
     bash \
@@ -10,7 +10,6 @@ RUN apt-get update && apt-get install -y \
     tzdata \
     awscli \
     ca-certificates \
-    ca-certificates-java \
     groff \
     less
 
