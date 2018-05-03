@@ -3,21 +3,18 @@ FROM blitznote/debase:17.10
 RUN apt-get update && apt-get install -y \
     bash \
     git \
-    perl \
-    rsync \
     openjdk-8-jdk \
     curl \
     docker.io \
-    jq \
     nodejs \
     tzdata \
     awscli \
     ca-certificates \
+    ca-certificates-java \
     groff \
-    less \
-    python3-pip
+    less
 
-RUN pip3 install --upgrade awscli
+#RUN pip3 install --upgrade awscli
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
