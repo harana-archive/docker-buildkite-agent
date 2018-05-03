@@ -17,7 +17,7 @@ RUN apt-get update && apt-get install -y \
     less \
     python3-pip
 
-RUN pip install --upgrade awscli
+RUN pip3 install --upgrade awscli
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
