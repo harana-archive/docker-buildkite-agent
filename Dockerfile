@@ -8,12 +8,12 @@ RUN apt-get update && apt-get install -y \
     docker.io \
     nodejs \
     tzdata \
-    awscli \
     ca-certificates \
     groff \
-    less
+    less \
+    python3-pip
 
-#RUN pip3 install --upgrade awscli
+RUN pip3 install --upgrade awscli
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
