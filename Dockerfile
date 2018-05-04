@@ -63,6 +63,8 @@ RUN aws s3 cp s3://deploy-buildkite-cache/ivy-dependencies-cache.tgz . && tar xf
 RUN aws s3 cp s3://deploy-buildkite-cache/maven-dependencies-cache.tgz . && tar xfz maven-dependencies-cache.tgz -C /root
 RUN aws s3 cp s3://deploy-buildkite-cache/sbt-dependencies-cache.tgz . && tar xfz sbt-dependencies-cache.tgz -C /root
 
+# Update NodeJS
+RUN npm i -g npm && npm install -g n && n lts
 
 VOLUME /buildkite
 ENTRYPOINT ["buildkite-agent-entrypoint"]
