@@ -7,6 +7,7 @@ RUN apt-get update && apt-get install -y \
     curl \
     docker.io \
     nodejs \
+    npm \
     tzdata \
     ca-certificates \
     groff \
