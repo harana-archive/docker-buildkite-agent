@@ -28,7 +28,7 @@ RUN mkdir -p ${BUILDKITE_BUILD_PATH} ${BUILDKITE_HOOKS_PATH} ${BUILDKITE_PLUGINS
 
 RUN curl -sL https://github.com/buildkite/agent/releases/download/v3.0.1/buildkite-agent-linux-amd64-3.0.1.tar.gz | gunzip | tar -x -C /buildkite && \
     mv /buildkite/buildkite-agent /usr/local/bin && \
-    chmod +x /usr/local/bin/buildkite-agent
+      chmod +x /usr/local/bin/buildkite-agent
 
 COPY ./entrypoint.sh /usr/local/bin/buildkite-agent-entrypoint
 
@@ -58,9 +58,9 @@ RUN curl -sL "https://archive.apache.org/dist/maven/maven-3/${MVN_VERSION}/binar
     chmod 0755 $MVN_HOME/bin/mvn
 
 # Copy Dependencies Cache
-RUN aws s3 cp s3://deploy-buildkite-cache/ivy-dependencies-cache.tgz . && tar vxfz ivy-dependencies-cache.tgz
-RUN aws s3 cp s3://deploy-buildkite-cache/maven-dependencies-cache.tgz . && tar vxfz maven-dependencies-cache.tgz
-RUN aws s3 cp s3://deploy-buildkite-cache/sbt-dependencies-cache.tgz . && tar vxfz sbt-dependencies-cache.tgz
+RUN aws s3 cp s3://deploy-buildkite-cache/ivy-dependencies-cache.tgz . && tar xfz ivy-dependencies-cache.tgz /root
+RUN aws s3 cp s3://deploy-buildkite-cache/maven-dependencies-cache.tgz . && tar xfz maven-dependencies-cache.tgz /root
+RUN aws s3 cp s3://deploy-buildkite-cache/sbt-dependencies-cache.tgz . && tar xfz sbt-dependencies-cache.tgz /root
 
 
 VOLUME /buildkite
