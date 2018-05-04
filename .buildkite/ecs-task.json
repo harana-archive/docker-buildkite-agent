@@ -1,0 +1,46 @@
+{
+  "containerDefinitions": [
+    {
+      "name": "buildkite",
+      "image": "buildkite/agent:latest",
+      "memory": "1500",
+      "cpu": "1024",
+      "essential": true,
+      "environment": [
+        {
+          "name": "BUILDKITE_AGENT_TOKEN",
+          "value": "6a7e0e2e32b203318cdee17e381bbedc491622bab7467c4351"
+        }
+      ],
+      "mountPoints": [
+        {
+          "containerPath": "/var/run/docker.sock",
+          "sourceVolume": "docker_socket",
+          "readOnly": null
+        },
+        {
+          "containerPath": "/var/lib/docker",
+          "sourceVolume": "docker_data",
+          "readOnly": null
+        }
+      ]
+    }
+  ],
+  "volumes": [
+    {
+      "host": {
+        "sourcePath": "/var/run/docker.sock"
+      },
+      "name": "docker_socket"
+    },
+    {
+      "host": {
+        "sourcePath": "/var/lib/docker"
+      },
+      "name": "docker_data"
+    }
+  ],
+  "networkMode": "bridge",
+  "placementConstraints": [],
+  "family": "buildkite-agent"
+}
