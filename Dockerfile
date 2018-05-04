@@ -57,6 +57,12 @@ RUN curl -sL "https://archive.apache.org/dist/maven/maven-3/${MVN_VERSION}/binar
     echo -ne "- with mvn $MVN_VERSION\n" >> /root/.built && \
     chmod 0755 $MVN_HOME/bin/mvn
 
+# Copy Dependencies Cache
+RUN aws s3 cp s3://deploy-buildkite-cache/ivy-dependencies-cache.tgz . && tar vxfz ivy-dependencies-cache.tgz
+RUN aws s3 cp s3://deploy-buildkite-cache/maven-dependencies-cache.tgz . && tar vxfz maven-dependencies-cache.tgz
+RUN aws s3 cp s3://deploy-buildkite-cache/sbt-dependencies-cache.tgz . && tar vxfz sbt-dependencies-cache.tgz
+
+
 VOLUME /buildkite
 ENTRYPOINT ["buildkite-agent-entrypoint"]
 CMD ["start"]
