@@ -58,6 +58,7 @@ RUN curl -sL "https://archive.apache.org/dist/maven/maven-3/${MVN_VERSION}/binar
     chmod 0755 $MVN_HOME/bin/mvn
 
 # Copy Dependencies Cache
+RUN aws s3 cp s3://deploy-buildkite-cache/coursier-dependencies-cache.tgz . && tar xfz coursier-dependencies-cache.tgz -C /root
 RUN aws s3 cp s3://deploy-buildkite-cache/ivy-dependencies-cache.tgz . && tar xfz ivy-dependencies-cache.tgz -C /root
 RUN aws s3 cp s3://deploy-buildkite-cache/maven-dependencies-cache.tgz . && tar xfz maven-dependencies-cache.tgz -C /root
 RUN aws s3 cp s3://deploy-buildkite-cache/sbt-dependencies-cache.tgz . && tar xfz sbt-dependencies-cache.tgz -C /root
